@@ -1,0 +1,38 @@
+import React from 'react'
+import UserItem from './UserItem'
+import './UserList.css'
+
+interface IUserProps {
+	id: string
+	name: string
+	image: string
+	places: number
+}
+
+interface IUserList {
+	items: IUserProps[]
+}
+function UserList(props: IUserList) {
+	if (props.items.length === 0) {
+		return (
+			<div className='cemter'>
+				<h2>No users found.</h2>
+			</div>
+		)
+	}
+	return (
+		<ul className='users-list'>
+			{props.items.map(user => {
+				return <UserItem
+					key={user.id}
+					id={user.id}
+					image={user.image}
+					name={user.name}
+					placeCount={user.places}
+				/>
+			})}
+		</ul>
+	)
+}
+
+export default UserList
