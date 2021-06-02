@@ -9,7 +9,7 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.use('/api/places', placesRoutes) // => /api/places...
+app.use('/api/places', placesRoutes) 
 app.use('/api/users', usersRoutes)
 
 app.use((req, res, next) => {
@@ -27,7 +27,8 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		'mongodb+srv://buinam:mrbui123456@cluster0.jntsz.mongodb.net/placesdatabase?retryWrites=true&w=majority'
+		'mongodb+srv://buinam:mrbui123456@cluster0.jntsz.mongodb.net/placesdatabase?retryWrites=true&w=majority', 
+		{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
 	)
 	.then(() => {
 		app.listen(5000)
