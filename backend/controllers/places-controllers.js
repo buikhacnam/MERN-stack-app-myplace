@@ -6,6 +6,7 @@ const getCoordsForAddress = require('../util/location')
 
 const Place = require('../models/place')
 const User = require('../models/user')
+const place = require('../models/place')
 
 const getPlaceById = async (req, res, next) => {
 	const placeId = req.params.pid // { pid: 'p1' }
@@ -92,7 +93,7 @@ const createPlace = async (req, res, next) => {
 		)
 		return next(error)
 	}
-
+	console.log('user', user)
 	if (!user) {
 		const error = new HttpError('Could not find user for provided id', 404)
 		return next(error)
@@ -157,14 +158,26 @@ const updatePlace = async (req, res, next) => {
 const deletePlace = async (req, res, next) => {
 	const placeId = req.params.pid
 	try {
-		place = await Place.findById(placeId)
+		//populated works with 'ref' property of 'creator' in the Place model
+		place = await Place.findById(placeId).populated('creator') 
 	} catch (err) {
 		const error = new HttpError('something went wrong, delete failed', 500)
 		return next(error)
 	}
 
+	if (!place) {
+		const error = new HttpError('Could not find place for this id', 404)
+		return next(error)
+	}
+
 	try {
-		await place.remove()
+		//will also delete the place id in the property places of User collection 
+		const sess = await mongoose.startSession()
+		sess.startTransaction()
+		await place.remove({ sesstion: sess })
+		place.creator.places.pull(place) // mongoose will remove the id in the 'creator' property
+		await place.creator.save({ sesstion: sess })
+		await sess.commitTransaction()
 	} catch {
 		const error = new HttpError('something went wrong, delete failed', 500)
 		return next(error)
