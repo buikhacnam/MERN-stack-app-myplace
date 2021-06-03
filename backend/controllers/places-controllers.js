@@ -6,7 +6,6 @@ const getCoordsForAddress = require('../util/location')
 
 const Place = require('../models/place')
 const User = require('../models/user')
-const place = require('../models/place')
 
 const getPlaceById = async (req, res, next) => {
 	const placeId = req.params.pid // { pid: 'p1' }
@@ -34,17 +33,21 @@ const getPlaceById = async (req, res, next) => {
 
 const getPlacesByUserId = async (req, res, next) => {
 	const userId = req.params.uid
-	let places
+
+	// let places;
+	let userWithPlaces
 	try {
-		places = await Place.find({ creator: userId })
-	} catch {
+		userWithPlaces = await User.findById(userId).populate('places')
+	} catch (err) {
 		const error = new HttpError(
-			'Fetching places failed, could not find a place',
+			'Fetching places failed, please try again later',
 			500
 		)
 		return next(error)
 	}
-	if (!places || places.length === 0) {
+
+	// if (!places || places.length === 0) {
+	if (!userWithPlaces || userWithPlaces.places.length === 0) {
 		return next(
 			new HttpError(
 				'Could not find places for the provided user id.',
@@ -53,7 +56,11 @@ const getPlacesByUserId = async (req, res, next) => {
 		)
 	}
 
-	res.json({ places: places.map(place => place.toObject({ getters: true })) })
+	res.json({
+		places: userWithPlaces.places.map(place =>
+			place.toObject({ getters: true })
+		),
+	})
 }
 
 const createPlace = async (req, res, next) => {
@@ -157,31 +164,42 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = async (req, res, next) => {
 	const placeId = req.params.pid
+
+	let place
 	try {
-		//populated works with 'ref' property of 'creator' in the Place model
-		place = await Place.findById(placeId).populated('creator') 
+		// populate allows to refer to document sorted in another collection and to work with data in that existing document of that collection
+		// to do so we need relation between 2 documents and we need to use ref in each of the collection to refer to the other ones
+		// creator property contains user id, mongoose then take this id and search for entire data store in user document
+		place = await Place.findById(placeId).populate('creator')
+		console.log('place', place)
 	} catch (err) {
-		const error = new HttpError('something went wrong, delete failed', 500)
+		const error = new HttpError(
+			'Something went wrong, could not delete place.',
+			500
+		)
 		return next(error)
 	}
 
 	if (!place) {
-		const error = new HttpError('Could not find place for this id', 404)
+		const error = new HttpError('Could not find place for this id.', 404)
 		return next(error)
 	}
 
 	try {
-		//will also delete the place id in the property places of User collection 
 		const sess = await mongoose.startSession()
 		sess.startTransaction()
-		await place.remove({ sesstion: sess })
-		place.creator.places.pull(place) // mongoose will remove the id in the 'creator' property
-		await place.creator.save({ sesstion: sess })
+		await place.remove({ session: sess })
+		place.creator.places.pull(place)
+		await place.creator.save({ session: sess })
 		await sess.commitTransaction()
-	} catch {
-		const error = new HttpError('something went wrong, delete failed', 500)
+	} catch (err) {
+		const error = new HttpError(
+			'Something went wrong, could not delete place.',
+			500
+		)
 		return next(error)
 	}
+
 	res.status(200).json({ message: 'Deleted place.' })
 }
 
