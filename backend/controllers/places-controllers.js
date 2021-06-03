@@ -1,10 +1,11 @@
 const { validationResult } = require('express-validator')
+const mongoose = require('mongoose')
 
 const HttpError = require('../models/http-error')
 const getCoordsForAddress = require('../util/location')
 
 const Place = require('../models/place')
-const place = require('../models/place')
+const User = require('../models/user')
 
 const getPlaceById = async (req, res, next) => {
 	const placeId = req.params.pid // { pid: 'p1' }
@@ -81,8 +82,30 @@ const createPlace = async (req, res, next) => {
 			'https://www.google.com/url?sa=i&url=https%3A%2F%2Fhatrabbits.com%2Fen%2Frandom-image%2F&psig=AOvVaw3j8C0Ig12AmUNZ0gMc78ZL&ust=1622599978362000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKCc1Iyu9fACFQAAAAAdAAAAABAD',
 	})
 
+	let user
 	try {
-		await createdPlace.save()
+		user = await User.findById(creator)
+	} catch (err) {
+		const error = new HttpError(
+			'Creating place failed, please try again',
+			500
+		)
+		return next(error)
+	}
+
+	if (!user) {
+		const error = new HttpError('Could not find user for provided id', 404)
+		return next(error)
+	}
+
+	try {
+		// check if all the operations work fine, otherwise roll back to the current database (making no changes)
+		const sess = await mongoose.startSession() // define current session provided by mongooses
+		sess.startTransaction() // note that transaction doesnt work when the collection doesnt exist
+		await createdPlace.save({ sesstion: sess })
+		user.places.push(createdPlace) //push here means mongoose only add createdPlace id to User collection, not a standard javascript push
+		await user.save({ sesstion: sess })
+		await sess.commitTransaction()
 	} catch (err) {
 		const error = new HttpError(
 			'Creating place fail, please try again',
