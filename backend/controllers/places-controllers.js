@@ -103,12 +103,12 @@ const createPlace = async (req, res, next) => {
 		const sess = await mongoose.startSession() // define current session provided by mongooses
 		sess.startTransaction() // note that transaction doesnt work when the collection doesnt exist
 		await createdPlace.save({ sesstion: sess })
-		user.places.push(createdPlace) //push here means mongoose only add createdPlace id to User collection, not a standard javascript push
+		user.places.push(createdPlace) //push here means mongoose only add createdPlace id to User collection, not a standard javascript push though
 		await user.save({ sesstion: sess })
 		await sess.commitTransaction()
 	} catch (err) {
 		const error = new HttpError(
-			'Creating place fail, please try again',
+			'Creating place failed, please try again',
 			500
 		)
 		return next(error)
