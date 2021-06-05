@@ -1,9 +1,11 @@
 import React from 'react'
 
-export default function NewPlace() {
+function NewPlace() {
     return (
         <div>
-            
+            Hello from New Place
         </div>
     )
 }
+
+export default NewPlace

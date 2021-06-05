@@ -2,8 +2,8 @@ import React from 'react'
 import './Card.css'
 
 interface ICardInterface {
-    className: string
-    children: React.ReactNode
+    className?: string
+    children?: React.ReactNode
     style?: any
 }
 export default function Card(props: ICardInterface) {
