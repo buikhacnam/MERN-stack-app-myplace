@@ -63,7 +63,7 @@ const getPlacesByUserId = async (req, res, next) => {
 	})
 }
 
-const createPlace = async (req, res, next) => {
+const createPlace = async (req, res, next) => { // by user id
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
 		return next(
@@ -100,7 +100,7 @@ const createPlace = async (req, res, next) => {
 		)
 		return next(error)
 	}
-	console.log('user', user)
+	
 	if (!user) {
 		const error = new HttpError('Could not find user for provided id', 404)
 		return next(error)
@@ -171,7 +171,6 @@ const deletePlace = async (req, res, next) => {
 		// to do so we need relation between 2 documents and we need to use ref in each of the collection to refer to the other ones
 		// creator property contains user id, mongoose then take this id and search for entire data store in user document
 		place = await Place.findById(placeId).populate('creator')
-		console.log('place', place)
 	} catch (err) {
 		const error = new HttpError(
 			'Something went wrong, could not delete place.',
@@ -189,7 +188,7 @@ const deletePlace = async (req, res, next) => {
 		const sess = await mongoose.startSession()
 		sess.startTransaction()
 		await place.remove({ session: sess })
-		place.creator.places.pull(place)
+		place.creator.places.pull(place) // this will remove the id in the user collection
 		await place.creator.save({ session: sess })
 		await sess.commitTransaction()
 	} catch (err) {
