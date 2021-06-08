@@ -22,9 +22,12 @@ const formReducer = (state: any, action: any) => {
 				...state,
 				inputs: {
 					...state.inputs,
-					[action.inputId] : { value: action.value, isValid: action.isValid }
+					[action.inputId]: {
+						value: action.value,
+						isValid: action.isValid,
+					},
 				},
-				isValid: formIsValid
+				isValid: formIsValid,
 			}
 		default:
 			return state
@@ -56,11 +59,13 @@ const NewPlace = () => {
 			type: 'INPUT_CHANGE',
 			value: value,
 			isValid: isValid,
-			inputId: id
+			inputId: id,
 		})
 	}, [])
 
-	const placeSubmitHandler = () => {}
+	const placeSubmitHandler = (event: any) => {
+		event.preventDefault()
+	}
 	return (
 		<form className='place-form' onSubmit={placeSubmitHandler}>
 			<Input
