@@ -21,6 +21,11 @@ function UserPlaces() {
 	const { userId } = useParams<{ userId: '' }>()
 	const fetchPlaces = useRef(() => {})
 
+	useEffect(() => {
+		fetchPlaces.current()
+	}, [])
+
+	
 	fetchPlaces.current = async () => {
 		try {
 			const responseData = await sendRequest(
@@ -31,9 +36,10 @@ function UserPlaces() {
 			console.log(error)
 		}
 	}
-	useEffect(() => {
-		fetchPlaces.current()
-	}, [])
+
+	const onDelete = (deletedPlaceId: string) => {
+		setLoadedPlaces(prev => prev.filter(place => place.id !== deletedPlaceId))
+	}
 
 	return (
 		<>
@@ -43,7 +49,7 @@ function UserPlaces() {
 					<LoadingSpinner />
 				</div>
 			)}
-			{!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+			{!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} onDelete={onDelete}/>}
 		</>
 	)
 }
