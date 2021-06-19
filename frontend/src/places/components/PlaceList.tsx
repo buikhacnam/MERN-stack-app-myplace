@@ -9,7 +9,7 @@ export interface IPlaceProperties {
     id: string
     title: string
     description: string
-    imageUrl: string
+    image: string
     address: string
     location: any
     creator: string
@@ -35,7 +35,7 @@ function PlaceList(props: IPlaceList) {
         <PlaceItem
           key={place.id}
           id={place.id}
-          imageUrl={place.imageUrl}
+          image={place.image}
           title={place.title}
           description={place.description}
           address={place.address}

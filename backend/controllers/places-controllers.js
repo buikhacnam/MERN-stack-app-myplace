@@ -86,8 +86,7 @@ const createPlace = async (req, res, next) => { // by user id
 		location: coordinates,
 		address,
 		creator,
-		image:
-			'https://www.google.com/url?sa=i&url=https%3A%2F%2Fhatrabbits.com%2Fen%2Frandom-image%2F&psig=AOvVaw3j8C0Ig12AmUNZ0gMc78ZL&ust=1622599978362000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKCc1Iyu9fACFQAAAAAdAAAAABAD',
+		image:'https://envato-shoebox-0.imgix.net/06a9/bb6d-7d51-46c2-8ba3-f499baa9156d/20181108-SIR04103.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=86e9c0e39726da53833d28358a633edc'
 	})
 
 	let user

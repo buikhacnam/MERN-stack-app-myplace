@@ -6,14 +6,11 @@ const getUsers = async (req, res, next) => {
 	let users
 	try {
 		users = await User.find({}, '-password')
-	} catch(err) {
-		const error = new HttpError(
-			'fetch users failed',
-			500
-		)
+	} catch (err) {
+		const error = new HttpError('fetch users failed', 500)
 		return next(error)
 	}
-	res.json({users: users.map(user => user.toObject({ getters: true }))})
+	res.json({ users: users.map(user => user.toObject({ getters: true })) })
 }
 
 const signup = async (req, res, next) => {
@@ -38,22 +35,22 @@ const signup = async (req, res, next) => {
 		const error = new HttpError('user existed already, please login', 422)
 		return next(error)
 	}
-	const createdUser = new User ({
-		name, 
+	const createdUser = new User({
+		name,
 		email,
 		password,
 		image: 'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg',
-		places: []
+		places: [],
 	})
 
 	try {
 		await createdUser.save()
-	} catch(err) {
+	} catch (err) {
 		const error = new HttpError('Sign up failed, plese try again', 500)
 		next(error)
 	}
-	
-	res.status(201).json({ user: createdUser.toObject({ getters: true}) })
+
+	res.status(201).json({ user: createdUser.toObject({ getters: true }) })
 }
 
 const login = async (req, res, next) => {
@@ -67,7 +64,7 @@ const login = async (req, res, next) => {
 		return next(error)
 	}
 
-	if(!existingUser || existingUser.password !== password) {
+	if (!existingUser || existingUser.password !== password) {
 		const error = new HttpError(
 			'Invalid credentials, could not logged in',
 			401
@@ -75,7 +72,10 @@ const login = async (req, res, next) => {
 		return next(error)
 	}
 
-	res.json({ message: 'Logged in!' })
+	res.json({
+		message: 'Logged in!',
+		user: existingUser.toObject({ getters: true }),
+	})
 }
 
 exports.getUsers = getUsers
