@@ -33,6 +33,7 @@ const Input = props => {
 	const { value, isValid } = inputState
 
 	useEffect(() => {
+		// when the input  is on change this onInput will check whether the CTA button is disabled or not
 		onInput(id, value, isValid)
 	}, [id, value, isValid, onInput])
 

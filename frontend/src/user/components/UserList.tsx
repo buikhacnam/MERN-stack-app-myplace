@@ -6,7 +6,7 @@ interface IUserProps {
 	id: string
 	name: string
 	image: string
-	places: number
+	places: string[]
 }
 
 interface IUserList {
@@ -28,7 +28,7 @@ function UserList(props: IUserList) {
 					id={user.id}
 					image={user.image}
 					name={user.name}
-					placeCount={user.places}
+					placeCount={user.places.length}
 				/>
 			})}
 		</ul>

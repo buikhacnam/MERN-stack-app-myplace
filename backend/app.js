@@ -9,7 +9,17 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.use('/api/places', placesRoutes) 
+app.use((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-Width, Content-Type, Accept, Authorization'
+	)
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE')
+	next()
+})
+
+app.use('/api/places', placesRoutes)
 app.use('/api/users', usersRoutes)
 
 app.use((req, res, next) => {
@@ -27,8 +37,12 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		'mongodb+srv://buinam:mrbui123456@cluster0.jntsz.mongodb.net/placesdatabase?retryWrites=true&w=majority', 
-		{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+		'mongodb+srv://buinam:mrbui123456@cluster0.jntsz.mongodb.net/yourplaces?retryWrites=true&w=majority',
+		{
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+		}
 	)
 	.then(() => {
 		app.listen(5000)

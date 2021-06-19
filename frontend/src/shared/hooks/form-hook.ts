@@ -46,8 +46,8 @@ export const useForm = (initialInputs: any, initialFormValidity: any) => {
     });
   }, []);
 
+  //will set the present value of the input depends on circumstances
   const setFormData = useCallback((inputData, formValidity) => {
-	  console.log('hih there')
     dispatch({
       type: 'SET_DATA',
       inputs: inputData,
