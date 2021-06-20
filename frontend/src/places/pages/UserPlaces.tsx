@@ -5,18 +5,7 @@ import useHttpClient from '../../shared/hooks/http-hook'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 function UserPlaces() {
-	const [loadedPlaces, setLoadedPlaces] = useState([
-		{
-			key: '',
-			id: '',
-			title: '',
-			description: '',
-			image: '',
-			address: '',
-			location: '',
-			creator: '',
-		},
-	])
+	const [loadedPlaces, setLoadedPlaces] = useState<any>(null)
 	const { isLoading, error, sendRequest, clearError } = useHttpClient()
 	const { userId } = useParams<{ userId: '' }>()
 	const fetchPlaces = useRef(() => {})
@@ -33,12 +22,12 @@ function UserPlaces() {
 			)
 			setLoadedPlaces(responseData.places)
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 
 	const onDelete = (deletedPlaceId: string) => {
-		setLoadedPlaces(prev => prev.filter(place => place.id !== deletedPlaceId))
+		setLoadedPlaces((prev: any) => prev.filter((place: any) => place.id !== deletedPlaceId))
 	}
 
 	return (

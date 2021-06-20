@@ -6,9 +6,7 @@ import useHttpClient from '../../shared/hooks/http-hook'
 
 export default function User() {
     const { isLoading, error, sendRequest, clearError } = useHttpClient()
-	const [loadedUsers, setLoadedUers] = useState([
-		{ id: '', name: '', image: '', places: [] },
-	])
+	const [loadedUsers, setLoadedUers] = useState<any>(null)
 
     const fetchUser = useRef(() => {})
 
@@ -33,7 +31,7 @@ export default function User() {
 					<LoadingSpinner />
 				</div>
 			)}
-			{!isLoading && loadedUsers && <UserList items={loadedUsers} />}
+			{!isLoading && loadedUsers  && <UserList items={loadedUsers} />}
 		</>
 	)
 }

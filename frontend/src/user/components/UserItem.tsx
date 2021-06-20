@@ -18,7 +18,7 @@ export default function UserItem(props: IUserItem) {
             <Card className='user-item__content'>
                 <Link to={`/${props.id}/places`}>
                     <div className='user-item__image'>
-                        <Avatar image={props.image} alt={props.name}/>
+                        <Avatar image={props.image?`http://localhost:5000/${props.image}`:''} alt={props.name}/>
                     </div>
                     <div className='user-item__info'>
                         <h2>{props.name}</h2>

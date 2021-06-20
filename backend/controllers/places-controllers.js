@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const { validationResult } = require('express-validator')
 const mongoose = require('mongoose')
 
@@ -86,7 +88,7 @@ const createPlace = async (req, res, next) => { // by user id
 		location: coordinates,
 		address,
 		creator,
-		image:'https://envato-shoebox-0.imgix.net/06a9/bb6d-7d51-46c2-8ba3-f499baa9156d/20181108-SIR04103.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=86e9c0e39726da53833d28358a633edc'
+		image: req.file.path
 	})
 
 	let user
@@ -120,6 +122,10 @@ const createPlace = async (req, res, next) => { // by user id
 		)
 		return next(error)
 	}
+
+	fs.unlink(imagePath, err => {
+		console.log(err)
+	})
 
 	res.status(201).json({ place: createdPlace })
 }
@@ -182,6 +188,8 @@ const deletePlace = async (req, res, next) => {
 		const error = new HttpError('Could not find place for this id.', 404)
 		return next(error)
 	}
+
+	const imagePath = place.image
 
 	try {
 		const sess = await mongoose.startSession()

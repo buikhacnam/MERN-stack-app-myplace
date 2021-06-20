@@ -12,6 +12,7 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import useHttpClient from '../../shared/hooks/http-hook'
 import { AuthContext } from '../../shared/context/auth-context'
+import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 
 const NewPlace = () => {
 	const { userId } = useContext(AuthContext)
@@ -33,26 +34,33 @@ const NewPlace = () => {
 		},
 		false
 	)
-  const history = useHistory()
+	const history = useHistory()
 
 	const placeSubmitHandler = async (event: any) => {
 		event.preventDefault()
 		try {
+			const formData = new FormData()
+			formData.append('title', formState.inputs.title.value)
+			formData.append('description', formState.inputs.description.value)
+			formData.append('address', formState.inputs.address.value)
+			formData.append('creator', userId || '')
+			formData.append('image', formState.inputs.image.value)
 			await sendRequest(
 				'http://localhost:5000/api/places',
 				'POST',
-				JSON.stringify({
-					title: formState.inputs.title.value,
-					description: formState.inputs.description.value,
-					address: formState.inputs.address.value,
-					creator: userId,
-				}),
-				{ 'Content-Type': 'application/json' }
+				// JSON.stringify({
+				// 	title: formState.inputs.title.value,
+				// 	description: formState.inputs.description.value,
+				// 	address: formState.inputs.address.value,
+				// 	creator: userId,
+				// }),
+				formData
+				// { 'Content-Type': 'application/json' }
 			)
 			// redirect users to different page (home page)
-      history.push('/')
+			history.push('/')
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 
@@ -61,6 +69,12 @@ const NewPlace = () => {
 			<ErrorModal error={error} onClear={clearError} />
 			<form className='place-form' onSubmit={placeSubmitHandler}>
 				{isLoading && <LoadingSpinner asOverlay />}
+				<ImageUpload
+					center
+					id='image'
+					onInput={inputHandler}
+					errorText='Please provide an image'
+				/>
 				<Input
 					id='title'
 					element='input'
