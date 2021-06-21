@@ -83,12 +83,12 @@ const createPlace = async (req, res, next) => { // by user id
 	}
 
 	const createdPlace = new Place({
+		image: req.file.path,
 		title,
 		description,
 		location: coordinates,
 		address,
-		creator,
-		image: req.file.path
+		creator
 	})
 
 	let user
@@ -123,9 +123,6 @@ const createPlace = async (req, res, next) => { // by user id
 		return next(error)
 	}
 
-	fs.unlink(imagePath, err => {
-		console.log(err)
-	})
 
 	res.status(201).json({ place: createdPlace })
 }
@@ -205,6 +202,10 @@ const deletePlace = async (req, res, next) => {
 		)
 		return next(error)
 	}
+
+	fs.unlink(imagePath, err => {
+		console.log(err)
+	})
 
 	res.status(200).json({ message: 'Deleted place.' })
 }
