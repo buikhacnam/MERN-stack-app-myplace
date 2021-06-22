@@ -15,7 +15,7 @@ import { AuthContext } from '../../shared/context/auth-context'
 import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 
 const NewPlace = () => {
-	const { userId } = useContext(AuthContext)
+	const { userId, token } = useContext(AuthContext)
 	const { isLoading, error, sendRequest, clearError } = useHttpClient()
 	const [formState, inputHandler] = useForm(
 		{
@@ -54,7 +54,8 @@ const NewPlace = () => {
 				// 	address: formState.inputs.address.value,
 				// 	creator: userId,
 				// }),
-				formData
+				formData,
+				{Authorization: 'Bearer ' + token}
 				// { 'Content-Type': 'application/json' }
 			)
 			// redirect users to different page (home page)

@@ -6,10 +6,12 @@ const { getPlaceById, getPlacesByUserId, updatePlace, deletePlace } = placesCont
 
 const fileUpload = require('../middleware/file-upload')
 const router = express.Router()
-
+const checkAuth = require('../middleware/check-auth')
 router.get('/:pid', getPlaceById)
 
 router.get('/user/:uid', getPlacesByUserId)
+
+router.use(checkAuth)
 
 router.post(
 	'/',
