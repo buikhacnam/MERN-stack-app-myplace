@@ -18,7 +18,7 @@ interface IplaceItem extends IPlaceProperties {
 
 function PlaceItem(props: IplaceItem) {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient()
-	const auth = useContext(AuthContext)
+	const { userId, token } = useContext(AuthContext)
 	const [showMap, setShowMap] = useState(false)
 	const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -39,7 +39,9 @@ function PlaceItem(props: IplaceItem) {
 		try {
 			await sendRequest(
 				`http://localhost:5000/api/places/${props.id}`,
-				'DELETE'
+				'DELETE',
+				null,
+				{ Authorization: 'Bearer ' + token }
 			)
 			props.onDelete(props.id)
 		} catch (error) {
@@ -105,11 +107,11 @@ function PlaceItem(props: IplaceItem) {
 						<Button inverse onClick={openMapHandler}>
 							VIEW ON MAP
 						</Button>
-						{auth.userId === props.creator && (
+						{userId === props.creator && (
 							<Button to={`/places/${props.id}`}>EDIT</Button>
 						)}
 
-						{auth.userId === props.creator && (
+						{userId === props.creator && (
 							<Button danger onClick={showDeleteWarningHandler}>
 								DELETE
 							</Button>

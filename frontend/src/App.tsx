@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
 	BrowserRouter as Router,
 	Route,
@@ -18,14 +18,26 @@ const App = () => {
 	const [token, setToken] = useState(null)
 	const [userId, setUserId] = useState(null)
 
-	const login = useCallback((uId, token) => {
+	useEffect(() => {
+		const storedData = JSON.parse(localStorage.getItem('userData') || '{}')
+		if (storedData && storedData.token) {
+			login(storedData.userId, storedData.token)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+	const login = useCallback((uId: any, token: any) => {
 		setToken(token)
+		localStorage.set(
+			'userData',
+			JSON.stringify({ userId: uId, token: token })
+		)
 		setUserId(uId)
 	}, [])
 
 	const logout = useCallback(() => {
 		setToken(null)
 		setUserId(null)
+		localStorage.removeItem('userData')
 	}, [])
 
 	let routes
@@ -66,7 +78,9 @@ const App = () => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ token, isLoggedIn: !!token, login, logout, userId }}>
+		<AuthContext.Provider
+			value={{ token, isLoggedIn: !!token, login, logout, userId }}
+		>
 			<Router>
 				<MainNavigation />
 				<main>{routes}</main>

@@ -34,7 +34,7 @@ const UpdatePlace = () => {
 	)
 	const fetchPlace = useRef(() => {})
 	const history = useHistory()
-	const { userId } = useContext(AuthContext)
+	const { userId, token } = useContext(AuthContext)
 
 	useEffect(() => {
 		fetchPlace.current()
@@ -73,7 +73,7 @@ const UpdatePlace = () => {
 					title: formState.inputs.title.value,
 					description: formState.inputs.description.value,
 				}),
-				{ 'Content-Type': 'application/json' }
+				{ 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
 			)
 			history.push(`/${userId}/places`)
 		} catch (error) {
