@@ -45,7 +45,7 @@ function PlaceItem(props: IplaceItem) {
 			)
 			props.onDelete(props.id)
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 

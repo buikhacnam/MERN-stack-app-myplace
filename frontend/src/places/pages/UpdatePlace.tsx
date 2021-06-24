@@ -60,7 +60,7 @@ const UpdatePlace = () => {
 				true
 			)
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 	const placeUpdateSubmitHandler = async (event: any) => {
@@ -77,7 +77,7 @@ const UpdatePlace = () => {
 			)
 			history.push(`/${userId}/places`)
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 

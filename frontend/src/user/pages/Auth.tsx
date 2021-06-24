@@ -80,7 +80,7 @@ const Auth = () => {
 				)
 				auth.login(responseData.userId, responseData.token)
 			} catch (error) {
-				console.log(error)
+				//console.log(error)
 			}
 		} else {
 			try {
@@ -104,7 +104,7 @@ const Auth = () => {
 				)
 				auth.login(responseData.userId, responseData.token)
 			} catch (error) {
-				console.log(error)
+				//console.log(error)
 			}
 		}
 	}

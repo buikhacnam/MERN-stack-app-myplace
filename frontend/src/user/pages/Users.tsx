@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import  { useEffect, useState, useRef } from 'react'
 import UserList from '../components/UserList'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
@@ -19,7 +19,7 @@ export default function User() {
 			const responseData = await sendRequest('http://localhost:5000/api/users')
 			setLoadedUers(responseData.users)
 		} catch (error) {
-			console.log(error)
+			//console.log(error)
 		}
 	}
 
