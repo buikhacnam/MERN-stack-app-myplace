@@ -9,7 +9,7 @@ const HttpError = require('./models/http-error')
 
 const app = express()
 
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 
@@ -46,7 +46,7 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		'mongodb+srv://buinam:mrbui123456@cluster0.jntsz.mongodb.net/yourplaces?retryWrites=true&w=majority',
+		`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jntsz.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -55,5 +55,6 @@ mongoose
 	)
 	.then(() => {
 		app.listen(5000)
+		console.log(`Listening on port 5000`)
 	})
 	.catch(err => console.log(err))

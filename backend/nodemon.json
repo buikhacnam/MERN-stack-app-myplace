@@ -1,0 +1,8 @@
+{
+    "env": {
+        "DB_USER": "buinam",
+        "DB_PASSWORD": "mrbui123456",
+        "DB_NAME": "yourplaces",
+        "JWT_KEY": "super_secret_key"
+    }
+}
