@@ -1,8 +1,7 @@
 {
     "env": {
-        "DB_USER": "buinam",
-        "DB_PASSWORD": "mrbui123456",
-        "DB_NAME": "yourplaces",
-        "JWT_KEY": "super_secret_key"
+        "JWT_KEY": "super_secret_key",
+        "MONGO_URI": "mongodb://localhost/local-my-place"
     }
 }
+
