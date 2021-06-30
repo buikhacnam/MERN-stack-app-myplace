@@ -11,7 +11,7 @@ Go to directory frontend
 Install dependencies
 
 ### `yarn start`
-Run the app in the port 3000
+Run the app on port 3000
 
 # Backend 
 
@@ -22,7 +22,7 @@ Go to directory backend
 Install dependencies
 
 ### `yarn start`
-Run the app in the port 5000
+Run the app on port 5000
 
 
 
