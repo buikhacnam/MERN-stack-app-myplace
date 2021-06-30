@@ -1,7 +1,7 @@
 # My Place Mern App
 ### `Live App:` https://buinam-myplace.netlify.app/
 
-In the project directory, you can run:
+# In the project directory, run the app locally:
 
 # Frontend 
 
