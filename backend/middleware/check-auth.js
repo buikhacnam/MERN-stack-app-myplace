@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 		if (!token) {
 			throw new Error('Authentication failed')
 		}
-		const decodedToken = jwt.verify(token, 'super_secret_key')
+		const decodedToken = jwt.verify(token, process.env.JWT_KEY)
         // add data to the request:
 		req.userData = { userId: decodedToken.userId }
         // allow to reach to below routers
