@@ -1,6 +1,6 @@
 # My Place Mern App
 
-##  https://buinam-myplace.netlify.app/ or run the app locally:
+## run the app locally:
 
 # Frontend 
 
